@@ -1,62 +1,61 @@
 /* G4Skins themed background and general body styles */
 body {
-    font-family: 'Segoe UI', Arial, sans-serif; /* More modern font */
-    background: linear-gradient(135deg, #1a2a3a, #0d1a26); /* Dark blue/grey gradient */
-    color: #e0e6ed; /* Lighter text color for contrast */
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #1a2a3a, #0d1a26);
+    color: #e0e6ed;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Use min-height to ensure content fits */
+    min-height: 100vh;
     margin: 0;
-    padding: 20px; /* Add some padding around the edges */
-    box-sizing: border-box; /* Include padding in element's total width and height */
-    position: relative; /* Needed for absolute logo positioning */
-    overflow: hidden; /* Hide any overflow if necessary */
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
 }
 
 /* Styling for the top-left logo */
 .logo-top-left {
-    position: absolute; /* Position relative to the body */
-    top: 20px; /* Distance from the top */
-    left: 20px; /* Distance from the left */
-    z-index: 1000; /* Ensure it's above other content */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
 }
 
 .logo-top-left img {
-    width: 150px; /* Adjust logo size as needed */
+    width: 150px;
     height: auto;
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)); /* Subtle shadow for depth */
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
 }
 
-
 .game-container {
-    background-color: rgba(22, 34, 44, 0.9); /* Slightly transparent dark background */
-    padding: 40px; /* Increased padding */
-    border-radius: 12px; /* Slightly more rounded corners */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7); /* Stronger, deeper shadow */
+    background-color: rgba(22, 34, 44, 0.9);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
     text-align: center;
     width: 90%;
-    max-width: 450px; /* Slightly wider container */
-    border: 1px solid rgba(60, 80, 100, 0.5); /* Subtle border */
-    position: relative; /* For potential future elements */
+    max-width: 450px;
+    border: 1px solid rgba(60, 80, 100, 0.5);
+    position: relative;
 }
 
 h1 {
-    color: #f39c12; /* G4Skins-like orange/gold for headings */
+    color: #f39c12;
     margin-bottom: 25px;
-    font-size: 2.5em; /* Larger heading */
-    text-shadow: 0 0 8px rgba(243, 156, 18, 0.4); /* Glow effect */
+    font-size: 2.5em;
+    text-shadow: 0 0 8px rgba(243, 156, 18, 0.4);
 }
 
 p {
     margin-bottom: 20px;
     font-size: 1.1em;
-    color: #b0c4de; /* Softer text color */
+    color: #b0c4de;
 }
 
 #playButton {
-    background-color: #f39c12; /* G4Skins-like orange/gold button */
-    color: #1a2a3a; /* Dark text on button */
+    background-color: #f39c12;
+    color: #1a2a3a;
     border: none;
     padding: 16px 32px;
     font-size: 20px;
@@ -68,8 +67,8 @@ p {
 }
 
 #playButton:hover {
-    background-color: #e67e22; /* Slightly darker orange on hover */
-    transform: translateY(-2px); /* Subtle lift effect */
+    background-color: #e67e22;
+    transform: translateY(-2px);
 }
 
 .results {
@@ -78,25 +77,18 @@ p {
 }
 
 #numberResult {
-    color: #e0e6ed; /* White for the number */
+    color: #e0e6ed;
     font-weight: bold;
     font-size: 1.2em;
 }
 
 #gameResult {
     font-weight: bold;
-    min-height: 50px; /* Prevents layout jump */
+    min-height: 50px;
     margin-top: 15px;
-    font-size: 1.8em; /* Larger result text */
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glow */
+    font-size: 1.8em;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
-
-/* Colors for win/lose messages from script.js */
-/* Ensure these match the colors set in script.js */
-/* Example:
-.win-color { color: #2ecc71; text-shadow: 0 0 8px rgba(46, 204, 113, 0.6); }
-.lose-color { color: #e74c3c; text-shadow: 0 0 8px rgba(231, 76, 60, 0.6); }
-*/
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
