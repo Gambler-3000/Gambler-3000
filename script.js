@@ -3,7 +3,7 @@ const numberResultSpan = document.getElementById('numberResult');
 const gameResultH2 = document.getElementById('gameResult');
 
 function playGame() {
-    const drawnNumber = Math.floor(Math.random() * 1000) + 1;
+    const drawnNumber = Math.floor(Math.random() * 100) + 1;
 
     numberResultSpan.textContent = drawnNumber;
 
