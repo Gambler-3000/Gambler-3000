@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-  <title>Moja Strona</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gra Masiaka</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Witaj na mojej stronie!</h1>
-  <p>To jest moja nowa strona hostowana na GitHub Pages.</p>
+
+    <div class="game-container">
+        <h1>Gra Masiaka</h1>
+        <p>Kliknij przycisk, aby spróbować szczęścia!</p>
+        <button id="playButton">Zagraj!</button>
+        
+        <div class="results">
+            <p>Wylosowana liczba: <span id="numberResult">...</span></p>
+            <h2 id="gameResult"></h2>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
