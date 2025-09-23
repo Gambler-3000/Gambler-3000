@@ -8,10 +8,10 @@ function playGame() {
     numberResultSpan.textContent = drawnNumber;
 
     if (drawnNumber === 67) {
-        gameResultH2.textContent = 'Masiak wygrywa 5 piw! Gratulacje!';
+        gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
         gameResultH2.style.color = '#2ecc71';
     } else {
-        gameResultH2.textContent = 'Masiak przejebał dom! Lepiej zagraj jeszcze raz!';
+        gameResultH2.textContent = 'Masiak przejebał dom, chuj mu w dupe.';
         gameResultH2.style.color = '#e74c3c';
     }
 }
