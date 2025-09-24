@@ -3,12 +3,13 @@ const numberResultSpan = document.getElementById('numberResult');
 const gameResultH2 = document.getElementById('gameResult');
 const videoContainer = document.getElementById('video-container');
 const videoPlayer = document.getElementById('scare-video');
-const gameContainer = document.querySelector('.game-container'); // Dodano referencję do kontenera gry
+const gameContainer = document.querySelector('.game-container');
 const originalTitle = document.title;
 
 let jumpingImages = [];
 let animationFrameId;
 
+// --- GŁÓWNA FUNKCJA GRY ---
 function playGame() {
     const drawnNumber = Math.floor(Math.random() * 100) + 1;
     numberResultSpan.textContent = drawnNumber;
@@ -21,7 +22,9 @@ function playGame() {
     }
 }
 
+// --- FUNKCJA URUCHAMIAJĄCA CAŁY EVENT ---
 function triggerSpecialEvent() {
+    // 1. Inicjalizacja: Zmiana tekstu, przycisku, tytułu strony
     gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
     gameResultH2.style.color = '#2ecc71';
     playButton.style.backgroundColor = 'black';
@@ -30,18 +33,18 @@ function triggerSpecialEvent() {
     playButton.disabled = true;
     document.title = 'DIE';
     
+    // 2. Uruchomienie animacji odbijających się obrazków
     const imageUrls = [
         'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
         'https://i.imgflip.com/2/26am.jpg',
         'https://i.ytimg.com/vi/S51zP_ge3Lg/maxresdefault.jpg'
     ];
-
     for (let i = 0; i < 5; i++) {
         createJumpingImage(imageUrls[i % imageUrls.length]);
     }
-    
     animationFrameId = requestAnimationFrame(animateJumpingImages);
 
+    // 3. Wyświetlenie serii alertów (jeden po drugim)
     const notifications = [
         'WARNING: SYSTEM INTEGRITY COMPROMISED!',
         'DATA CORRUPTION IMMINENT.',
@@ -49,14 +52,21 @@ function triggerSpecialEvent() {
         'FATAL ERROR: RECALIBRATING EXISTENCE.',
         'NO ESCAPE. NO HOPE. ONLY US.'
     ];
-
+    // Ta pętla zatrzyma wykonywanie kodu, dopóki nie klikniesz "OK" w każdym alercie
     for (const msg of notifications) {
         alert(msg);
     }
     
+    // 4. Uruchomienie wideo DOPIERO PO ZAMKNIĘCIU OSTATNIEGO ALERTU
+    playVideoSequence();
+}
+
+// --- FUNKCJA ODPOWIEDZIALNA ZA ODTWORZENIE WIDEO ---
+function playVideoSequence() {
     videoContainer.style.display = 'flex';
     videoContainer.classList.add('visible');
 
+    // Próba odtworzenia wideo z dźwiękiem
     videoPlayer.muted = true; 
     const playPromise = videoPlayer.play();
 
@@ -65,9 +75,13 @@ function triggerSpecialEvent() {
             videoPlayer.muted = false;
         }).catch(error => {
             console.error("Autoplay z dźwiękiem został zablokowany przez przeglądarkę:", error);
+            // Wideo będzie odtwarzane bez dźwięku, jeśli przeglądarka zablokuje
         });
     }
 }
+
+
+// --- FUNKCJE POMOCNICZE (BEZ ZMIAN) ---
 
 function createJumpingImage(imageUrl) {
     const img = document.createElement('img');
@@ -105,33 +119,17 @@ function animateJumpingImages() {
     animationFrameId = requestAnimationFrame(animateJumpingImages);
 }
 
-// --- NOWY, POPRAWIONY KOD NA KONIEC WIDEO ---
 function endTheExperience() {
-    // 1. Spraw, by wideo zniknęło płynnie
     videoContainer.style.opacity = '0';
-
-    // 2. Zatrzymaj animację odbijających się obrazków
     cancelAnimationFrame(animationFrameId);
-
-    // 3. Po 1 sekundzie (gdy wideo zniknie) wyczyść resztę strony
     setTimeout(() => {
-        // Usuń kontener wideo z widoku
         videoContainer.style.display = 'none';
-
-        // Usuń wszystkie odbijające się obrazki
         jumpingImages.forEach(imgData => imgData.element.remove());
-        jumpingImages = []; // Wyczyść tablicę
-
-        // Ukryj główny kontener gry
+        jumpingImages = [];
         gameContainer.style.display = 'none';
-
-        // Zmień tło na całkowicie czarne
         document.body.style.background = 'black';
-
-    }, 1000); // Czas musi pasować do przejścia 'transition' w CSS
+    }, 1000);
 }
 
-// Nasłuchujemy na zdarzenie 'ended', aby uruchomić nową funkcję
 videoPlayer.addEventListener('ended', endTheExperience);
-
 playButton.addEventListener('click', playGame);
