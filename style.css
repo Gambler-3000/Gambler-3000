@@ -107,3 +107,37 @@ p {
         width: 120px;
     }
 }
+
+/* Style dla "dziwnych" obrazków */
+.jumping-image {
+    position: fixed; /* Pozycjonowanie względem okna przeglądarki */
+    z-index: 999;   /* Aby były nad resztą strony */
+    width: 150px;
+    height: 150px;
+    border: 3px solid red;
+    box-shadow: 0 0 15px red;
+    animation: fadeInOut 1.5s linear;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* Style dla kontenera wideo */
+.video-container {
+    display: none; /* Domyślnie ukryty */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: 9998; /* Bardzo wysoki z-index, żeby był na wierzchu */
+    justify-content: center;
+    align-items: center;
+}
+
+.video-container iframe {
+    border: none;
+}
