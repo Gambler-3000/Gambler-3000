@@ -108,7 +108,7 @@ p {
     }
 }
 
-/* Style dla "dziwnych" obrazków - teraz kontrolowane przez JS */
+/* Style for jumping images */
 .jumping-image {
     position: fixed;
     z-index: 999;
@@ -118,7 +118,7 @@ p {
     box-shadow: 0 0 15px red;
 }
 
-/* Nowe style dla kontenera wideo - początkowo przezroczyste */
+/* Style for video container */
 .video-container {
     display: none;
     position: fixed;
@@ -132,14 +132,10 @@ p {
     align-items: center;
     opacity: 0;
     transition: opacity 1s ease-in-out;
-    pointer-events: none; /* DODANO: BLOKUJE MOŻLIWOŚĆ KLIKNIĘCIA NA WIDEO */
+    pointer-events: none; /* Disables clicking on the video */
 }
 
 .video-container.visible {
     opacity: 1;
     display: flex;
-}
-
-.video-container iframe {
-    border: none;
 }
