@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoContainer = document.getElementById('video-container');
     const videoPlayer = document.getElementById('scare-video');
     const gameContainer = document.querySelector('.game-container');
-    const logo = document.querySelector('.logo-top-left'); // Dodano referencję do logo
+    const logo = document.querySelector('.logo-top-left');
 
     // --- STATE VARIABLES ---
     let jumpingImages = [];
-    let animationFrameId;
+    let animationFrameId = null; // Zresetuj ID animacji
 
     // --- CORE FUNCTIONS ---
     function playGame() {
@@ -28,13 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function triggerSpecialEvent() {
-        // --- NOWA SEKWENCJA: WSTĘP ---
-        // 1. Ukryj wszystko i zmień tło na czarne
+        // --- PRE-EVENT SEQUENCE ---
         gameContainer.style.display = 'none';
         logo.style.display = 'none';
         document.body.style.background = 'black';
 
-        // 2. Stwórz i wyświetl komunikat "Trafiłeś 67..."
         const preEventMessage = document.createElement('h1');
         preEventMessage.textContent = 'Trafiłeś 67...';
         preEventMessage.style.color = 'white';
@@ -46,17 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
         preEventMessage.style.zIndex = '10001';
         document.body.appendChild(preEventMessage);
 
-        // 3. Po 3 sekundach opóźnienia, przywróć stronę i zacznij główny event
         setTimeout(() => {
-            // Przywróć wygląd strony
-            preEventMessage.remove(); // Usuń komunikat
-            document.body.style.background = 'linear-gradient(135deg, #1a2a3a, #0d1a26)'; // Przywróć tło
+            // Restore page appearance
+            preEventMessage.remove();
+            document.body.style.background = 'linear-gradient(135deg, #1a2a3a, #0d1a26)';
             gameContainer.style.display = 'block';
             logo.style.display = 'block';
 
-            // --- GŁÓWNY EVENT (tak jak wcześniej) ---
-            
-            // Zmień przycisk
+            // --- MAIN EVENT ---
             gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
             gameResultH2.style.color = '#2ecc71';
             playButton.style.backgroundColor = 'black';
@@ -65,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             playButton.disabled = true;
             document.title = 'DIE';
             
-            // Uruchom odbijające się obrazki
+            // Start bouncing images
             const imageUrls = [
                 'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
                 'https://i.imgflip.com/2/26am.jpg',
@@ -74,9 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < 5; i++) {
                 createJumpingImage(imageUrls[i % imageUrls.length]);
             }
-            animationFrameId = requestAnimationFrame(animateJumpingImages);
+            // Start the animation loop
+            if (animationFrameId === null) {
+                animateJumpingImages();
+            }
 
-            // Wyświetl alerty
+            // Display alerts
             const notifications = [
                 'WARNING: SYSTEM INTEGRITY COMPROMISED!',
                 'DATA CORRUPTION IMMINENT.',
@@ -88,10 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(msg);
             }
             
-            // Odtwórz wideo
+            // Play video
             playVideoSequence();
 
-        }, 3000); // 3000 milisekund = 3 sekundy opóźnienia
+        }, 3000); 
     }
 
     function playVideoSequence() {
@@ -110,7 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function endTheExperience() {
         videoContainer.style.opacity = '0';
-        cancelAnimationFrame(animationFrameId);
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
         setTimeout(() => {
             videoContainer.style.display = 'none';
             jumpingImages.forEach(imgData => imgData.element.remove());
@@ -135,27 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function animateJumpingImages() {
-        const imgWidth = 150;
-        const imgHeight = 150;
         jumpingImages.forEach(imgData => {
             imgData.x += imgData.dx;
             imgData.y += imgData.dy;
-            if (imgData.x + imgWidth > window.innerWidth || imgData.x < 0) {
-                imgData.dx *= -1;
-                if (imgData.x < 0) imgData.x = 0;
-                if (imgData.x + imgWidth > window.innerWidth) imgData.x = window.innerWidth - imgWidth;
-            }
-            if (imgData.y + imgHeight > window.innerHeight || imgData.y < 0) {
-                imgData.dy *= -1;
-                if (imgData.y < 0) imgData.y = 0;
-                if (imgData.y + imgHeight > window.innerHeight) imgData.y = window.innerHeight - imgHeight;
-            }
+            if (imgData.x + 150 > window.innerWidth || imgData.x < 0) imgData.dx *= -1;
+            if (imgData.y + 150 > window.innerHeight || imgData.y < 0) imgData.dy *= -1;
             imgData.element.style.left = `${imgData.x}px`;
             imgData.element.style.top = `${imgData.y}px`;
         });
         animationFrameId = requestAnimationFrame(animateJumpingImages);
     }
 
+    // --- EVENT LISTENERS ---
     if (playButton) {
         playButton.addEventListener('click', playGame);
     }
