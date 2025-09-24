@@ -108,34 +108,36 @@ p {
     }
 }
 
-/* Style dla "dziwnych" obrazków */
+/* Style dla "dziwnych" obrazków - teraz kontrolowane przez JS */
 .jumping-image {
-    position: fixed; /* Pozycjonowanie względem okna przeglądarki */
-    z-index: 999;   /* Aby były nad resztą strony */
+    position: fixed;
+    z-index: 999;
     width: 150px;
     height: 150px;
     border: 3px solid red;
     box-shadow: 0 0 15px red;
-    animation: fadeInOut 1.5s linear;
 }
 
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
-}
-
-/* Style dla kontenera wideo */
+/* Nowe style dla kontenera wideo - początkowo przezroczyste */
 .video-container {
-    display: none; /* Domyślnie ukryty */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     background-color: black;
-    z-index: 9998; /* Bardzo wysoki z-index, żeby był na wierzchu */
+    z-index: 9998;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    pointer-events: none; /* DODANO: BLOKUJE MOŻLIWOŚĆ KLIKNIĘCIA NA WIDEO */
+}
+
+.video-container.visible {
+    opacity: 1;
+    display: flex;
 }
 
 .video-container iframe {
