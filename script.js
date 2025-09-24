@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function playGame() {
         const drawnNumber = Math.floor(Math.random() * 100) + 1;
         numberResultSpan.textContent = drawnNumber;
-
         if (drawnNumber === 67) {
             triggerSpecialEvent();
         } else {
@@ -40,54 +39,46 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(preEventMessage);
 
         setTimeout(() => {
-            // Restore page and start main event
             preEventMessage.remove();
             document.body.style.background = '';
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
-
-            gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
-            gameResultH2.style.color = '#2ecc71';
-            playButton.style.backgroundColor = 'black';
-            playButton.style.color = 'red';
-            playButton.textContent = 'ERROR';
-            playButton.disabled = true;
-            document.title = 'DIE';
-            
-            const imageUrls = [
-                'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
-                'https://i.imgflip.com/2/26am.jpg',
-                'https://i.ytimg.com/vi/S5lYP_ge3Lg/maxresdefault.jpg'
-            ];
-            for (let i = 0; i < 5; i++) {
-                createJumpingImage(imageUrls[i % imageUrls.length]);
-            }
-            animateJumpingImages();
-
-            const notifications = [
-                'WARNING: SYSTEM INTEGRITY COMPROMISED!',
-                'DATA CORRUPTION IMMINENT.',
-                'ACCESS DENIED: YOUR REALITY IS OURS.',
-                'FATAL ERROR: RECALIBRATING EXISTENCE.',
-                'NO ESCAPE. NO HOPE. ONLY US.'
-            ];
-            
-            // Show alerts one after another, then play the video
-            showNextAlert(notifications, 0, () => {
-                playVideoSequence();
-            });
-
+            setTimeout(() => {
+                startMainEvent();
+            }, 50);
         }, 3000); 
     }
-    
-    // New function to handle alerts sequentially without blocking rendering
-    function showNextAlert(alerts, index, onComplete) {
-        if (index >= alerts.length) {
-            onComplete();
-            return;
+
+    function startMainEvent() {
+        gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
+        gameResultH2.style.color = '#2ecc71';
+        playButton.style.backgroundColor = 'black';
+        playButton.style.color = 'red';
+        playButton.textContent = 'ERROR';
+        playButton.disabled = true;
+        document.title = 'DIE';
+        
+        const imageUrls = [
+            'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
+            'https://i.imgflip.com/2/26am.jpg',
+            'https://i.ytimg.com/vi/S51zP_ge3Lg/maxresdefault.jpg'
+        ];
+        for (let i = 0; i < 5; i++) {
+            createJumpingImage(imageUrls[i % imageUrls.length]);
         }
-        alert(alerts[index]);
-        showNextAlert(alerts, index + 1, onComplete);
+        animateJumpingImages();
+
+        const notifications = [
+            'WARNING: SYSTEM INTEGRITY COMPROMISED!',
+            'DATA CORRUPTION IMMINENT.',
+            'ACCESS DENIED: YOUR REALITY IS OURS.',
+            'FATAL ERROR: RECALIBRATING EXISTENCE.',
+            'NO ESCAPE. NO HOPE. ONLY US.'
+        ];
+        for (const msg of notifications) {
+            alert(msg);
+        }
+        playVideoSequence();
     }
 
     function playVideoSequence() {
@@ -96,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         videoPlayer.muted = true; 
         const playPromise = videoPlayer.play();
         if (playPromise !== undefined) {
-            playPromise.then(() => {
+            playPromise.then(_ => {
                 videoPlayer.muted = false;
             }).catch(error => {
                 console.error("Autoplay with sound was blocked by the browser:", error);
@@ -151,5 +142,4 @@ document.addEventListener('DOMContentLoaded', () => {
     if (videoPlayer) {
         videoPlayer.addEventListener('ended', endTheExperience);
     }
-
 });
