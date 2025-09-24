@@ -47,28 +47,30 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             // 1. Przywróć stronę do normalności
             preEventMessage.remove();
-            document.body.style.background = '';
+            document.body.style.background = ''; // Usuń styl, aby wrócić do tła z CSS
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
 
-            // 2. DODANO KRÓTKIE OPÓŹNIENIE, ABY PRZEGLĄDARKA ZDĄŻYŁA ODŚWIEŻYĆ WIDOK
+            // 2. Krótkie opóźnienie, aby przeglądarka zdążyła odświeżyć widok
             setTimeout(() => {
-                // 3. Dopiero teraz uruchom główny event z blokującymi alertami
+                // 3. Uruchom główny event
                 startMainEvent();
-            }, 50); // 50 milisekund wystarczy, jest to niezauważalne dla użytkownika
-
+            }, 50); // 50 milisekund wystarczy
         }, 3000); 
     }
 
     function startMainEvent() {
+        // --- MAIN EVENT INITIATION ---
+        // 1. Zmień wygląd przycisku na ERROR
         gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
-        gameResultH2.style.color = '#2ecc71';
+        gameResultH2.style.color = '#2ecc71'; // Ten kolor jest dla gameResultH2
         playButton.style.backgroundColor = 'black';
         playButton.style.color = 'red';
         playButton.textContent = 'ERROR';
         playButton.disabled = true;
         document.title = 'DIE';
         
+        // 2. Uruchom odbijające się obrazki
         const imageUrls = [
             'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
             'https://i.imgflip.com/2/26am.jpg',
@@ -77,8 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < 5; i++) {
             createJumpingImage(imageUrls[i % imageUrls.length]);
         }
-        animateJumpingImages();
+        if (animationFrameId === null) { // Upewnij się, że animacja nie jest już uruchomiona
+            animateJumpingImages();
+        }
 
+        // 3. Wyświetl alerty
         const notifications = [
             'WARNING: SYSTEM INTEGRITY COMPROMISED!',
             'DATA CORRUPTION IMMINENT.',
@@ -90,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(msg);
         }
         
+        // 4. Odtwórz wideo
         playVideoSequence();
     }
 
@@ -117,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             videoContainer.style.display = 'none';
             jumpingImages.forEach(imgData => imgData.element.remove());
             jumpingImages = [];
-            gameContainer.classList.add('hidden');
+            gameContainer.classList.add('hidden'); // Ukryj kontener gry
             document.body.style.background = 'black';
         }, 1000);
     }
@@ -148,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animationFrameId = requestAnimationFrame(animateJumpingImages);
     }
 
+    // --- EVENT LISTENERS ---
     if (playButton) {
         playButton.addEventListener('click', playGame);
     }
