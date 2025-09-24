@@ -1,4 +1,4 @@
-// Wait for the entire HTML document to be loaded and ready
+// Czekaj, aż cały dokument HTML zostanie wczytany i gotowy
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- ELEMENT REFERENCES ---
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoContainer = document.getElementById('video-container');
     const videoPlayer = document.getElementById('scare-video');
     const gameContainer = document.querySelector('.game-container');
+    const logo = document.querySelector('.logo-top-left'); // Dodano referencję do logo
 
     // --- STATE VARIABLES ---
     let jumpingImages = [];
@@ -27,49 +28,77 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function triggerSpecialEvent() {
-        // 1. Initialize: Change text, button, and page title
-        gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
-        gameResultH2.style.color = '#2ecc71';
-        playButton.style.backgroundColor = 'black';
-        playButton.style.color = 'red';
-        playButton.textContent = 'ERROR';
-        playButton.disabled = true;
-        document.title = 'DIE';
-        
-        // 2. Start the bouncing image animations
-        const imageUrls = [
-            'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
-            'https://i.imgflip.com/2/26am.jpg',
-            'https://i.ytimg.com/vi/S51zP_ge3Lg/maxresdefault.jpg'
-        ];
-        for (let i = 0; i < 5; i++) {
-            createJumpingImage(imageUrls[i % imageUrls.length]);
-        }
-        animationFrameId = requestAnimationFrame(animateJumpingImages);
+        // --- NOWA SEKWENCJA: WSTĘP ---
+        // 1. Ukryj wszystko i zmień tło na czarne
+        gameContainer.style.display = 'none';
+        logo.style.display = 'none';
+        document.body.style.background = 'black';
 
-        // 3. Display a series of alerts (one after another)
-        const notifications = [
-            'WARNING: SYSTEM INTEGRITY COMPROMISED!',
-            'DATA CORRUPTION IMMINENT.',
-            'ACCESS DENIED: YOUR REALITY IS OURS.',
-            'FATAL ERROR: RECALIBRATING EXISTENCE.',
-            'NO ESCAPE. NO HOPE. ONLY US.'
-        ];
-        for (const msg of notifications) {
-            alert(msg);
-        }
-        
-        // 4. Play the video sequence AFTER the last alert is closed
-        playVideoSequence();
+        // 2. Stwórz i wyświetl komunikat "Trafiłeś 67..."
+        const preEventMessage = document.createElement('h1');
+        preEventMessage.textContent = 'Trafiłeś 67...';
+        preEventMessage.style.color = 'white';
+        preEventMessage.style.position = 'fixed';
+        preEventMessage.style.top = '50%';
+        preEventMessage.style.left = '50%';
+        preEventMessage.style.transform = 'translate(-50%, -50%)';
+        preEventMessage.style.fontSize = '3em';
+        preEventMessage.style.zIndex = '10001';
+        document.body.appendChild(preEventMessage);
+
+        // 3. Po 3 sekundach opóźnienia, przywróć stronę i zacznij główny event
+        setTimeout(() => {
+            // Przywróć wygląd strony
+            preEventMessage.remove(); // Usuń komunikat
+            document.body.style.background = 'linear-gradient(135deg, #1a2a3a, #0d1a26)'; // Przywróć tło
+            gameContainer.style.display = 'block';
+            logo.style.display = 'block';
+
+            // --- GŁÓWNY EVENT (tak jak wcześniej) ---
+            
+            // Zmień przycisk
+            gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
+            gameResultH2.style.color = '#2ecc71';
+            playButton.style.backgroundColor = 'black';
+            playButton.style.color = 'red';
+            playButton.textContent = 'ERROR';
+            playButton.disabled = true;
+            document.title = 'DIE';
+            
+            // Uruchom odbijające się obrazki
+            const imageUrls = [
+                'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
+                'https://i.imgflip.com/2/26am.jpg',
+                'https://i.ytimg.com/vi/S51zP_ge3Lg/maxresdefault.jpg'
+            ];
+            for (let i = 0; i < 5; i++) {
+                createJumpingImage(imageUrls[i % imageUrls.length]);
+            }
+            animationFrameId = requestAnimationFrame(animateJumpingImages);
+
+            // Wyświetl alerty
+            const notifications = [
+                'WARNING: SYSTEM INTEGRITY COMPROMISED!',
+                'DATA CORRUPTION IMMINENT.',
+                'ACCESS DENIED: YOUR REALITY IS OURS.',
+                'FATAL ERROR: RECALIBRATING EXISTENCE.',
+                'NO ESCAPE. NO HOPE. ONLY US.'
+            ];
+            for (const msg of notifications) {
+                alert(msg);
+            }
+            
+            // Odtwórz wideo
+            playVideoSequence();
+
+        }, 3000); // 3000 milisekund = 3 sekundy opóźnienia
     }
 
     function playVideoSequence() {
         videoContainer.style.display = 'flex';
         videoContainer.classList.add('visible');
-
         videoPlayer.muted = true; 
         const playPromise = videoPlayer.play();
-
         if (playPromise !== undefined) {
             playPromise.then(_ => {
                 videoPlayer.muted = false;
@@ -88,10 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
             jumpingImages = [];
             gameContainer.style.display = 'none';
             document.body.style.background = 'black';
-        }, 1000); // This time must match the 'transition' in CSS
+        }, 1000);
     }
 
-    // --- HELPER FUNCTIONS ---
     function createJumpingImage(imageUrl) {
         const img = document.createElement('img');
         img.src = imageUrl;
@@ -128,8 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
         animationFrameId = requestAnimationFrame(animateJumpingImages);
     }
 
-    // --- EVENT LISTENERS ---
-    // Check if elements exist before adding listeners to be safe
     if (playButton) {
         playButton.addEventListener('click', playGame);
     }
@@ -137,4 +163,4 @@ document.addEventListener('DOMContentLoaded', () => {
         videoPlayer.addEventListener('ended', endTheExperience);
     }
 
-}); // End of DOMContentLoaded wrapper
+});
