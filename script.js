@@ -45,13 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(preEventMessage);
 
         setTimeout(() => {
+            // 1. Przywróć stronę do normalności
             preEventMessage.remove();
-            document.body.style.background = ''; // Usuń styl, aby wrócić do tła z CSS
+            document.body.style.background = '';
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
 
-            // --- MAIN EVENT ---
-            startMainEvent();
+            // 2. DODANO KRÓTKIE OPÓŹNIENIE, ABY PRZEGLĄDARKA ZDĄŻYŁA ODŚWIEŻYĆ WIDOK
+            setTimeout(() => {
+                // 3. Dopiero teraz uruchom główny event z blokującymi alertami
+                startMainEvent();
+            }, 50); // 50 milisekund wystarczy, jest to niezauważalne dla użytkownika
 
         }, 3000); 
     }
