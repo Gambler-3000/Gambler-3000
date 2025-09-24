@@ -3,6 +3,7 @@ const numberResultSpan = document.getElementById('numberResult');
 const gameResultH2 = document.getElementById('gameResult');
 const videoContainer = document.getElementById('video-container');
 const videoPlayer = document.getElementById('scare-video');
+const gameContainer = document.querySelector('.game-container'); // Dodano referencję do kontenera gry
 const originalTitle = document.title;
 
 let jumpingImages = [];
@@ -28,21 +29,7 @@ function triggerSpecialEvent() {
     playButton.textContent = 'ERROR';
     playButton.disabled = true;
     document.title = 'DIE';
-
-    videoContainer.style.display = 'flex';
-    videoContainer.classList.add('visible');
-
-    videoPlayer.muted = true; 
-    const playPromise = videoPlayer.play();
-
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            videoPlayer.muted = false;
-        }).catch(error => {
-            console.error("Autoplay z dźwiękiem został zablokowany przez przeglądarkę:", error);
-        });
-    }
-
+    
     const imageUrls = [
         'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
         'https://i.imgflip.com/2/26am.jpg',
@@ -63,11 +50,23 @@ function triggerSpecialEvent() {
         'NO ESCAPE. NO HOPE. ONLY US.'
     ];
 
-    notifications.forEach((msg, index) => {
-        setTimeout(() => {
-            alert(msg);
-        }, 2000 + index * 3000);
-    });
+    for (const msg of notifications) {
+        alert(msg);
+    }
+    
+    videoContainer.style.display = 'flex';
+    videoContainer.classList.add('visible');
+
+    videoPlayer.muted = true; 
+    const playPromise = videoPlayer.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+            videoPlayer.muted = false;
+        }).catch(error => {
+            console.error("Autoplay z dźwiękiem został zablokowany przez przeglądarkę:", error);
+        });
+    }
 }
 
 function createJumpingImage(imageUrl) {
@@ -106,10 +105,33 @@ function animateJumpingImages() {
     animationFrameId = requestAnimationFrame(animateJumpingImages);
 }
 
-// --- NOWY KOD: NASŁUCHIWANIE NA KONIEC WIDEO ---
-videoPlayer.addEventListener('ended', () => {
-    // Ta funkcja zostanie wywołana, gdy wideo się skończy
-    window.close();
-});
+// --- NOWY, POPRAWIONY KOD NA KONIEC WIDEO ---
+function endTheExperience() {
+    // 1. Spraw, by wideo zniknęło płynnie
+    videoContainer.style.opacity = '0';
+
+    // 2. Zatrzymaj animację odbijających się obrazków
+    cancelAnimationFrame(animationFrameId);
+
+    // 3. Po 1 sekundzie (gdy wideo zniknie) wyczyść resztę strony
+    setTimeout(() => {
+        // Usuń kontener wideo z widoku
+        videoContainer.style.display = 'none';
+
+        // Usuń wszystkie odbijające się obrazki
+        jumpingImages.forEach(imgData => imgData.element.remove());
+        jumpingImages = []; // Wyczyść tablicę
+
+        // Ukryj główny kontener gry
+        gameContainer.style.display = 'none';
+
+        // Zmień tło na całkowicie czarne
+        document.body.style.background = 'black';
+
+    }, 1000); // Czas musi pasować do przejścia 'transition' w CSS
+}
+
+// Nasłuchujemy na zdarzenie 'ended', aby uruchomić nową funkcję
+videoPlayer.addEventListener('ended', endTheExperience);
 
 playButton.addEventListener('click', playGame);
