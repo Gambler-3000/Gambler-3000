@@ -1,7 +1,5 @@
-// Czekaj, aż cały dokument HTML zostanie wczytany i gotowy
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- ELEMENT REFERENCES ---
     const playButton = document.getElementById('playButton');
     const numberResultSpan = document.getElementById('numberResult');
     const gameResultH2 = document.getElementById('gameResult');
@@ -10,11 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameContainer = document.querySelector('.game-container');
     const logo = document.querySelector('.logo-top-left');
 
-    // --- STATE VARIABLES ---
     let jumpingImages = [];
     let animationFrameId = null;
 
-    // --- CORE FUNCTIONS ---
     function playGame() {
         const drawnNumber = Math.floor(Math.random() * 100) + 1;
         numberResultSpan.textContent = drawnNumber;
@@ -28,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function triggerSpecialEvent() {
-        // --- PRE-EVENT SEQUENCE ---
         gameContainer.classList.add('hidden');
         logo.classList.add('hidden');
         document.body.style.background = 'black';
@@ -45,58 +40,54 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(preEventMessage);
 
         setTimeout(() => {
-            // 1. Przywróć stronę do normalności
+            // Restore page and start main event
             preEventMessage.remove();
-            document.body.style.background = ''; // Usuń styl, aby wrócić do tła z CSS
+            document.body.style.background = '';
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
 
-            // 2. Krótkie opóźnienie, aby przeglądarka zdążyła odświeżyć widok
-            setTimeout(() => {
-                // 3. Uruchom główny event
-                startMainEvent();
-            }, 50); // 50 milisekund wystarczy
+            gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
+            gameResultH2.style.color = '#2ecc71';
+            playButton.style.backgroundColor = 'black';
+            playButton.style.color = 'red';
+            playButton.textContent = 'ERROR';
+            playButton.disabled = true;
+            document.title = 'DIE';
+            
+            const imageUrls = [
+                'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
+                'https://i.imgflip.com/2/26am.jpg',
+                'https://i.ytimg.com/vi/S5lYP_ge3Lg/maxresdefault.jpg'
+            ];
+            for (let i = 0; i < 5; i++) {
+                createJumpingImage(imageUrls[i % imageUrls.length]);
+            }
+            animateJumpingImages();
+
+            const notifications = [
+                'WARNING: SYSTEM INTEGRITY COMPROMISED!',
+                'DATA CORRUPTION IMMINENT.',
+                'ACCESS DENIED: YOUR REALITY IS OURS.',
+                'FATAL ERROR: RECALIBRATING EXISTENCE.',
+                'NO ESCAPE. NO HOPE. ONLY US.'
+            ];
+            
+            // Show alerts one after another, then play the video
+            showNextAlert(notifications, 0, () => {
+                playVideoSequence();
+            });
+
         }, 3000); 
     }
-
-    function startMainEvent() {
-        // --- MAIN EVENT INITIATION ---
-        // 1. Zmień wygląd przycisku na ERROR
-        gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
-        gameResultH2.style.color = '#2ecc71'; // Ten kolor jest dla gameResultH2
-        playButton.style.backgroundColor = 'black';
-        playButton.style.color = 'red';
-        playButton.textContent = 'ERROR';
-        playButton.disabled = true;
-        document.title = 'DIE';
-        
-        // 2. Uruchom odbijające się obrazki
-        const imageUrls = [
-            'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
-            'https://i.imgflip.com/2/26am.jpg',
-            'https://i.ytimg.com/vi/S51zP_ge3Lg/maxresdefault.jpg'
-        ];
-        for (let i = 0; i < 5; i++) {
-            createJumpingImage(imageUrls[i % imageUrls.length]);
+    
+    // New function to handle alerts sequentially without blocking rendering
+    function showNextAlert(alerts, index, onComplete) {
+        if (index >= alerts.length) {
+            onComplete();
+            return;
         }
-        if (animationFrameId === null) { // Upewnij się, że animacja nie jest już uruchomiona
-            animateJumpingImages();
-        }
-
-        // 3. Wyświetl alerty
-        const notifications = [
-            'WARNING: SYSTEM INTEGRITY COMPROMISED!',
-            'DATA CORRUPTION IMMINENT.',
-            'ACCESS DENIED: YOUR REALITY IS OURS.',
-            'FATAL ERROR: RECALIBRATING EXISTENCE.',
-            'NO ESCAPE. NO HOPE. ONLY US.'
-        ];
-        for (const msg of notifications) {
-            alert(msg);
-        }
-        
-        // 4. Odtwórz wideo
-        playVideoSequence();
+        alert(alerts[index]);
+        showNextAlert(alerts, index + 1, onComplete);
     }
 
     function playVideoSequence() {
@@ -105,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         videoPlayer.muted = true; 
         const playPromise = videoPlayer.play();
         if (playPromise !== undefined) {
-            playPromise.then(_ => {
+            playPromise.then(() => {
                 videoPlayer.muted = false;
             }).catch(error => {
                 console.error("Autoplay with sound was blocked by the browser:", error);
@@ -123,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             videoContainer.style.display = 'none';
             jumpingImages.forEach(imgData => imgData.element.remove());
             jumpingImages = [];
-            gameContainer.classList.add('hidden'); // Ukryj kontener gry
+            gameContainer.classList.add('hidden');
             document.body.style.background = 'black';
         }, 1000);
     }
@@ -154,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
         animationFrameId = requestAnimationFrame(animateJumpingImages);
     }
 
-    // --- EVENT LISTENERS ---
     if (playButton) {
         playButton.addEventListener('click', playGame);
     }
