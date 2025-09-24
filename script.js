@@ -29,12 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function triggerSpecialEvent() {
         // --- PRE-EVENT SEQUENCE ---
-        // 1. Ukryj elementy, dodając im klasę .hidden
         gameContainer.classList.add('hidden');
         logo.classList.add('hidden');
         document.body.style.background = 'black';
 
-        // 2. Stwórz i wyświetl komunikat "Trafiłeś 67..."
         const preEventMessage = document.createElement('h1');
         preEventMessage.textContent = 'Trafiłeś 67...';
         preEventMessage.style.color = 'white';
@@ -47,9 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(preEventMessage);
 
         setTimeout(() => {
-            // 3. Przywróć stronę do normalności, usuwając klasę .hidden
             preEventMessage.remove();
-            document.body.style.background = ''; // Usuń styl inline, aby wrócić do tła z CSS
+            document.body.style.background = ''; // Usuń styl, aby wrócić do tła z CSS
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
 
@@ -60,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startMainEvent() {
-        // Zmień przycisk
         gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
         gameResultH2.style.color = '#2ecc71';
         playButton.style.backgroundColor = 'black';
@@ -69,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         playButton.disabled = true;
         document.title = 'DIE';
         
-        // Start bouncing images
         const imageUrls = [
             'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
             'https://i.imgflip.com/2/26am.jpg',
@@ -80,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         animateJumpingImages();
 
-        // Display alerts
         const notifications = [
             'WARNING: SYSTEM INTEGRITY COMPROMISED!',
             'DATA CORRUPTION IMMINENT.',
@@ -92,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(msg);
         }
         
-        // Play video
         playVideoSequence();
     }
 
@@ -120,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             videoContainer.style.display = 'none';
             jumpingImages.forEach(imgData => imgData.element.remove());
             jumpingImages = [];
-            gameContainer.classList.add('hidden'); // Użyj klasy do ukrycia
+            gameContainer.classList.add('hidden');
             document.body.style.background = 'black';
         }, 1000);
     }
@@ -151,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
         animationFrameId = requestAnimationFrame(animateJumpingImages);
     }
 
-    // --- EVENT LISTENERS ---
     if (playButton) {
         playButton.addEventListener('click', playGame);
     }
