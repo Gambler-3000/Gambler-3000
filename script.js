@@ -44,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
             
-            startMainEvent();
+            setTimeout(() => {
+                startMainEvent();
+            }, 50);
+
         }, 3000); 
     }
 
@@ -111,37 +114,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
-    // --- ZMODYFIKOWANA FUNKCJA TWORZENIA OKIENEK ---
     function createJumpingElement(imageUrl) {
-        // Lista strasznych tekstów do losowania
         const scaryTexts = ['DIE', 'INITIALIZING', 'THE END IS NEAR', 'CAN YOU SEE ME?', 'RUN', 'ERROR 404', 'BEHIND YOU'];
-        
-        // 1. Stwórz główny kontener
         const container = document.createElement('div');
         container.className = 'jumping-container';
-
-        // 2. Stwórz obrazek w środku
         const img = document.createElement('img');
         img.src = imageUrl;
-
-        // 3. Stwórz tekst na wierzchu
         const textOverlay = document.createElement('div');
         textOverlay.className = 'overlay-text';
-        // Losuj tekst z listy
         textOverlay.textContent = scaryTexts[Math.floor(Math.random() * scaryTexts.length)];
-
-        // 4. Złóż wszystko w całość
         container.appendChild(img);
         container.appendChild(textOverlay);
-
-        // 5. Ustaw pozycję i ruch tak jak wcześniej
         let x = Math.random() * (window.innerWidth - 200);
         let y = Math.random() * (window.innerHeight - 150);
         let dx = (Math.random() < 0.5 ? 1 : -1) * (2 + Math.random() * 3);
         let dy = (Math.random() < 0.5 ? 1 : -1) * (2 + Math.random() * 3);
         container.style.top = `${y}px`;
         container.style.left = `${x}px`;
-        
         document.body.appendChild(container);
         jumpingElements.push({ element: container, x: x, y: y, dx: dx, dy: dy });
     }
