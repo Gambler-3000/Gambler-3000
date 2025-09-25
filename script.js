@@ -44,10 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
             
-            setTimeout(() => {
-                startMainEvent();
-            }, 50);
-
+            startMainEvent();
         }, 3000); 
     }
 
@@ -60,13 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
         playButton.disabled = true;
         document.title = 'DIE';
         
-        const imageUrls = [
-            'https://i.ibb.co/L5hY6tB/dark-smile.jpg',
-            'https://i.imgflip.com/2/26am.jpg',
-            'https://i.ytimg.com/vi/S51zP_ge3Lg/maxresdefault.jpg'
-        ];
         for (let i = 0; i < 5; i++) {
-            createJumpingElement(imageUrls[i % imageUrls.length]);
+            createJumpingElement(); // Nie potrzebujemy już przekazywać URL obrazka
         }
         animateJumpingElements();
 
@@ -114,23 +106,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
-    function createJumpingElement(imageUrl) {
+    // --- ZMODYFIKOWANA FUNKCJA - USUNIĘTO TWORZENIE OBRAZKÓW ---
+    function createJumpingElement() {
         const scaryTexts = ['DIE', 'INITIALIZING', 'THE END IS NEAR', 'CAN YOU SEE ME?', 'RUN', 'ERROR 404', 'BEHIND YOU'];
+        
         const container = document.createElement('div');
         container.className = 'jumping-container';
-        const img = document.createElement('img');
-        img.src = imageUrl;
+
         const textOverlay = document.createElement('div');
         textOverlay.className = 'overlay-text';
         textOverlay.textContent = scaryTexts[Math.floor(Math.random() * scaryTexts.length)];
-        container.appendChild(img);
+
         container.appendChild(textOverlay);
+
         let x = Math.random() * (window.innerWidth - 200);
         let y = Math.random() * (window.innerHeight - 150);
         let dx = (Math.random() < 0.5 ? 1 : -1) * (2 + Math.random() * 3);
         let dy = (Math.random() < 0.5 ? 1 : -1) * (2 + Math.random() * 3);
         container.style.top = `${y}px`;
         container.style.left = `${x}px`;
+        
         document.body.appendChild(container);
         jumpingElements.push({ element: container, x: x, y: y, dx: dx, dy: dy });
     }
