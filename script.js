@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameContainer = document.querySelector('.game-container');
     const logo = document.querySelector('.logo-top-left');
 
-    let jumpingImages = [];
+    let jumpingElements = [];
     let animationFrameId = null;
 
     function playGame() {
@@ -45,12 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
             logo.classList.remove('hidden');
             
             startMainEvent();
-
         }, 3000); 
     }
 
     function startMainEvent() {
-        // 1. Zmień wygląd przycisku i natychmiast uruchom obrazki
         gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
         gameResultH2.style.color = '#2ecc71';
         playButton.style.backgroundColor = 'black';
@@ -65,13 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'https://i.ytimg.com/vi/S51zP_ge3Lg/maxresdefault.jpg'
         ];
         for (let i = 0; i < 5; i++) {
-            createJumpingImage(imageUrls[i % imageUrls.length]);
+            createJumpingElement(imageUrls[i % imageUrls.length]);
         }
-        animateJumpingImages();
+        animateJumpingElements();
 
-        // 2. Zaczekaj 5 sekund, pozwalając obrazkom skakać
         setTimeout(() => {
-            // 3. Dopiero po 5 sekundach pokaż alerty i wideo
             const notifications = [
                 'WARNING: SYSTEM INTEGRITY COMPROMISED!',
                 'DATA CORRUPTION IMMINENT.',
@@ -83,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(msg);
             }
             playVideoSequence();
-        }, 5000); // ZMIENIONO CZAS NA 5000 milisekund (5 sekund)
+        }, 5000);
     }
 
     function playVideoSequence() {
@@ -108,37 +104,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         setTimeout(() => {
             videoContainer.style.display = 'none';
-            jumpingImages.forEach(imgData => imgData.element.remove());
-            jumpingImages = [];
+            jumpingElements.forEach(elData => elData.element.remove());
+            jumpingElements = [];
             gameContainer.classList.add('hidden');
             document.body.style.background = 'black';
         }, 1000);
     }
 
-    function createJumpingImage(imageUrl) {
+    // --- ZMODYFIKOWANA FUNKCJA TWORZENIA OKIENEK ---
+    function createJumpingElement(imageUrl) {
+        // Lista strasznych tekstów do losowania
+        const scaryTexts = ['DIE', 'INITIALIZING', 'THE END IS NEAR', 'CAN YOU SEE ME?', 'RUN', 'ERROR 404', 'BEHIND YOU'];
+        
+        // 1. Stwórz główny kontener
+        const container = document.createElement('div');
+        container.className = 'jumping-container';
+
+        // 2. Stwórz obrazek w środku
         const img = document.createElement('img');
         img.src = imageUrl;
-        img.className = 'jumping-image';
-        let x = Math.random() * (window.innerWidth - 150);
+
+        // 3. Stwórz tekst na wierzchu
+        const textOverlay = document.createElement('div');
+        textOverlay.className = 'overlay-text';
+        // Losuj tekst z listy
+        textOverlay.textContent = scaryTexts[Math.floor(Math.random() * scaryTexts.length)];
+
+        // 4. Złóż wszystko w całość
+        container.appendChild(img);
+        container.appendChild(textOverlay);
+
+        // 5. Ustaw pozycję i ruch tak jak wcześniej
+        let x = Math.random() * (window.innerWidth - 200);
         let y = Math.random() * (window.innerHeight - 150);
         let dx = (Math.random() < 0.5 ? 1 : -1) * (2 + Math.random() * 3);
         let dy = (Math.random() < 0.5 ? 1 : -1) * (2 + Math.random() * 3);
-        img.style.top = `${y}px`;
-        img.style.left = `${x}px`;
-        document.body.appendChild(img);
-        jumpingImages.push({ element: img, x: x, y: y, dx: dx, dy: dy });
+        container.style.top = `${y}px`;
+        container.style.left = `${x}px`;
+        
+        document.body.appendChild(container);
+        jumpingElements.push({ element: container, x: x, y: y, dx: dx, dy: dy });
     }
 
-    function animateJumpingImages() {
-        jumpingImages.forEach(imgData => {
-            imgData.x += imgData.dx;
-            imgData.y += imgData.dy;
-            if (imgData.x + 150 > window.innerWidth || imgData.x < 0) imgData.dx *= -1;
-            if (imgData.y + 150 > window.innerHeight || imgData.y < 0) imgData.dy *= -1;
-            imgData.element.style.left = `${imgData.x}px`;
-            imgData.element.style.top = `${imgData.y}px`;
+    function animateJumpingElements() {
+        jumpingElements.forEach(elData => {
+            elData.x += elData.dx;
+            elData.y += elData.dy;
+            if (elData.x + 200 > window.innerWidth || elData.x < 0) elData.dx *= -1;
+            if (elData.y + 150 > window.innerHeight || elData.y < 0) elData.dy *= -1;
+            elData.element.style.left = `${elData.x}px`;
+            elData.element.style.top = `${elData.y}px`;
         });
-        animationFrameId = requestAnimationFrame(animateJumpingImages);
+        animationFrameId = requestAnimationFrame(animateJumpingElements);
     }
 
     if (playButton) {
