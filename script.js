@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function playGame() {
         const drawnNumber = Math.floor(Math.random() * 100) + 1;
         numberResultSpan.textContent = drawnNumber;
-
         if (drawnNumber === 67) {
             triggerSpecialEvent();
         } else {
@@ -45,14 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
             gameContainer.classList.remove('hidden');
             logo.classList.remove('hidden');
             
-            setTimeout(() => {
-                startMainEvent();
-            }, 50);
+            startMainEvent();
 
         }, 3000); 
     }
 
     function startMainEvent() {
+        // 1. Zmień wygląd przycisku i natychmiast uruchom obrazki
         gameResultH2.textContent = 'Masiak wygrywa kose! (i tak chuj mu w dupe).';
         gameResultH2.style.color = '#2ecc71';
         playButton.style.backgroundColor = 'black';
@@ -71,17 +69,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         animateJumpingImages();
 
-        const notifications = [
-            'WARNING: SYSTEM INTEGRITY COMPROMISED!',
-            'DATA CORRUPTION IMMINENT.',
-            'ACCESS DENIED: YOUR REALITY IS OURS.',
-            'FATAL ERROR: RECALIBRATING EXISTENCE.',
-            'NO ESCAPE. NO HOPE. ONLY US.'
-        ];
-        for (const msg of notifications) {
-            alert(msg);
-        }
-        playVideoSequence();
+        // 2. Zaczekaj 5 sekund, pozwalając obrazkom skakać
+        setTimeout(() => {
+            // 3. Dopiero po 5 sekundach pokaż alerty i wideo
+            const notifications = [
+                'WARNING: SYSTEM INTEGRITY COMPROMISED!',
+                'DATA CORRUPTION IMMINENT.',
+                'ACCESS DENIED: YOUR REALITY IS OURS.',
+                'FATAL ERROR: RECALIBRATING EXISTENCE.',
+                'NO ESCAPE. NO HOPE. ONLY US.'
+            ];
+            for (const msg of notifications) {
+                alert(msg);
+            }
+            playVideoSequence();
+        }, 5000); // ZMIENIONO CZAS NA 5000 milisekund (5 sekund)
     }
 
     function playVideoSequence() {
