@@ -95,14 +95,7 @@ p {
     justify-content: center;
     align-items: center;
 }
-.jumping-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.4;
-}
 .overlay-text {
-    position: absolute;
     color: red;
     font-family: 'Courier New', monospace;
     font-size: 28px;
